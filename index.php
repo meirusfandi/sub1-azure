@@ -59,6 +59,7 @@
         }
         echo "<h3>Your're registered!</h3>";
     } else if (isset($_POST['load_data'])) {
+        echo "Sampai sini";
         try {
             $sql_select = "SELECT * FROM user";
             $stmt = $conn->query($sql_select);
