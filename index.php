@@ -1,6 +1,6 @@
 <html>
  <head>
- <Title>User List Form</Title>
+ <Title>Registration Form</Title>
  <style type="text/css">
  	body { background-color: #fff; border-top: solid 10px #000;
  	    color: #333; font-size: .85em; margin: 20; padding: 20;
@@ -16,11 +16,11 @@
  </style>
  </head>
  <body>
- <h1>Add User!</h1>
- <p>Fill in your name and username, then click <strong>Submit</strong> to Add User.</p>
+ <h1>Register here!</h1>
+ <p>Fill in your name and email address, then click <strong>Submit</strong> to register.</p>
  <form method="post" action="index.php" enctype="multipart/form-data" >
        Name  <input type="text" name="name" id="name"/></br></br>
-       Username <input type="text" name="username" id="username"/></br></br>
+       Email <input type="text" name="email" id="email"/></br></br>
        Job <input type="text" name="job" id="job"/></br></br>
        <input type="submit" name="submit" value="Submit" />
        <input type="submit" name="load_data" value="Load Data" />
@@ -31,12 +31,7 @@
     $pass = "mr_Condong1105";
     $db = "transferin";
     try {
-        $options = array(
-            "Database" => $db,
-            "UID" => $user,
-            "PWD" =>$pass
-        );
-        $conn = sqlsrv_connect($host, $options);
+        $conn = new PDO("sqlsrv:server = $host; Database = $db", $user, $pass);
         $conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
     } catch(Exception $e) {
         echo "Failed: " . $e;
@@ -44,36 +39,39 @@
     if (isset($_POST['submit'])) {
         try {
             $name = $_POST['name'];
-            $username = $_POST['username'];
+            $email = $_POST['email'];
             $job = $_POST['job'];
+            $date = date("Y-m-d");
             // Insert data
-            $sql_insert = "INSERT INTO user (name, username, job) 
-                        VALUES (?,?,?)";
+            $sql_insert = "INSERT INTO Registration (name, email, job, date) 
+                        VALUES (?,?,?,?)";
             $stmt = $conn->prepare($sql_insert);
             $stmt->bindValue(1, $name);
-            $stmt->bindValue(2, $username);
+            $stmt->bindValue(2, $email);
             $stmt->bindValue(3, $job);
+            $stmt->bindValue(4, $date);
             $stmt->execute();
         } catch(Exception $e) {
             echo "Failed: " . $e;
         }
         echo "<h3>Your're registered!</h3>";
     } else if (isset($_POST['load_data'])) {
-        echo "Sampai sini";
         try {
-            $sql_select = "SELECT * FROM user";
+            $sql_select = "SELECT * FROM Registration";
             $stmt = $conn->query($sql_select);
             $registrants = $stmt->fetchAll(); 
             if(count($registrants) > 0) {
                 echo "<h2>People who are registered:</h2>";
                 echo "<table>";
                 echo "<tr><th>Name</th>";
-                echo "<th>Username</th>";
+                echo "<th>Email</th>";
                 echo "<th>Job</th>";
+                echo "<th>Date</th></tr>";
                 foreach($registrants as $registrant) {
                     echo "<tr><td>".$registrant['name']."</td>";
-                    echo "<td>".$registrant['username']."</td>";
+                    echo "<td>".$registrant['email']."</td>";
                     echo "<td>".$registrant['job']."</td>";
+                    echo "<td>".$registrant['date']."</td></tr>";
                 }
                 echo "</table>";
             } else {
