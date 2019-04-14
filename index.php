@@ -19,9 +19,9 @@
  <h1>Add User!</h1>
  <p>Fill in your name and username, then click <strong>Submit</strong> to Add User.</p>
  <form method="post" action="index.php" enctype="multipart/form-data" >
-       Name  <input type="text" name="name" id="name" required/></br></br>
-       Username <input type="text" name="username" id="username" required/></br></br>
-       Job <input type="text" name="job" id="job" required/></br></br>
+       Name  <input type="text" name="name" id="name"/></br></br>
+       Username <input type="text" name="username" id="username"/></br></br>
+       Job <input type="text" name="job" id="job"/></br></br>
        <input type="submit" name="submit" value="Submit" />
        <input type="submit" name="load_data" value="Load Data" />
  </form>
@@ -46,7 +46,6 @@
             $name = $_POST['name'];
             $username = $_POST['username'];
             $job = $_POST['job'];
-            $date = date("Y-m-d");
             // Insert data
             $sql_insert = "INSERT INTO user (name, username, job) 
                         VALUES (?,?,?)";
