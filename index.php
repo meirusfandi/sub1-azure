@@ -31,7 +31,12 @@
     $pass = "mr_Condong1105";
     $db = "transferin";
     try {
-        $conn = new PDO("sqlsrv:server = $host; Database = $db", $user, $pass);
+        $options = array(
+            "Database" => $db,
+            "UID" => $user,
+            "PWD" =>$pass
+        );
+        $conn = sqlsrv_connect($host, $options);
         $conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
     } catch(Exception $e) {
         echo "Failed: " . $e;
